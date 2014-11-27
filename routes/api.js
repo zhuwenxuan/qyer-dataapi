@@ -9,21 +9,15 @@ router.get('/:key', function(req, res) {
 	var filename = req.params.key;
 	var params = urllib.parse(req.url, true);
 	var dir = path.join(__dirname,"../public/json/");
-	 var data = require(dir+filename+".js").getData();
-//	 console.log(f)
-//    var str = File.readFile(dir+filename+".json","utf8",function(err,data){
-    	// res.json(JSON.parse(data));
-
-
-    	if (params.query && params.query.callback) {
-		   //console.log(params.query.callback);
-		   var str =  params.query.callback + '(' + JSON.stringify(data) + ')';//jsonp
-		   res.end(str);
-		 } else {
-		   res.json(data);//普通的json
-		 }     
-//    });
-    
+    var data = require(dir+filename+".js").getData();
+    if (params.query && params.query.callback) {
+        //jsonp
+        var str =  params.query.callback + '(' + JSON.stringify(data) + ')';
+        res.end(str);
+    } else {
+        //普通的json
+        res.json(data);
+    }
 });
 
 module.exports = router;
